@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+  {% block content %}
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Login</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">username</label>
+            <input name="username" type="username" class="form-control" id="username" placeholder="Enter your username">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Enter your password">
+          </div>
+          <div class="mb-3 form-check">
+            <input name="remember" type="checkbox" class="form-check-input" id="remember" checked>
+            <label class="form-check-label" for="remember" >Remember me</label>
+          </div>
+
+          <div class="text-center mt-3">
+            Already have an account? <a href="{% url 'signup' %}">Sign Up</a>
+          </div>
+          <br>
+          
+          <button type="submit" class="btn btn-success btn-block">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+

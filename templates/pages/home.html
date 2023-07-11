@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+
+
+
+
+{% block content %}
+
+<link rel="stylesheet" href='{% static 'css/post.css' %}'>
+
+{% for p in posts %}
+    {% include 'post.html' with post=p %}
+
+{% endfor %}
+
+
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark bg-dark ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">AB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'create_post'  %}">New</a>
+          </li>
+
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{request.user.username}}
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'profile' request.user.username %}">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout'  %}">Log Out</a></li>
+            </ul>
+          </li>
+        
+          
+          {% else %} 
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Join Us
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'login' %}">Log In</a></li>
+              <li><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+            </ul>
+          </li>
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link ">About</a>
+          </li>
+        </ul>
+    {% if request.user.is_authenticated %}
+    </div>
+    <form class="d-flex" role="search" action={% url 'search'  %}>
+        <input name="searchbar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button name="searchbtn" class="btn btn-outline-light" type="submit">Search</button>
+    </form>
+    </div>
+    {% endif %}
+  </nav>
+  <br>

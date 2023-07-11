@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load users_extras %}
+{% load static %}
+  
+
+{% block content %}
+
+  <link rel="stylesheet" href='{% static 'css/profile.css' %}'>
+  <link rel="stylesheet" href='{% static 'css/post.css' %}'>
+  
+  <br>
+  
+  <div class="container">
+    <div class="profile-container">
+      <div class="profile-userinfo">
+        
+        <img src="{{user_page.photo.url}}" alt="User Photo" class="profile-photo">
+        
+        <div>
+          <div class="profile-username">{% if post.author.verified_badge %}<i class="fas fa-check-circle verified-badge"></i>{% endif %}&nbsp{{user_page.username}}</div>
+          <div class="followers-following">
+              <div>Followers  &nbsp</div>
+              <div class="followers-count">{{user_page.get_followers}}</div>
+              <div>Following  &nbsp</div>
+              <div class="following-count">{{user_page.get_followings}}</div>
+          </div>
+        </div>
+        <div class="post-menu">
+            <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown"></i>
+            <ul class="dropdown-menu">
+              {% if request.user == user_page %}
+              <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'reset_password' request.user.username %}">Reset Password</a></li>
+              <li><a class="dropdown-item" href="#">Delete Account</a></li>
+              <li><a class="dropdown-item" href="#">make it privite</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="#">Block</a></li>
+              <li><a class="dropdown-item" href="#">Report</a></li>
+
+              {% endif %}
+            </ul>
+          </div>
+      </div>
+      <div class="profile-bio">
+        {{user_page.bio}}
+      </div>
+
+      {% if request.user.username not in request.path %}
+      <form method='POST' action={% url 'un_follow' user_page.username %}>
+        {% csrf_token %}
+        {% is_follower request.user user_page  as is_follower %}
+        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow{% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+      </form>
+      {% endif %}
+      
+    </div>
+  </div>
+  
+  {% for p in posts %}
+  
+    {% include "post.html" with post=p %}
+  {% endfor %}
+  
+  
+  {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+
+
+{% comment %} {% include 'post.html' with post=post user_react=post.user_react(request.user) %} {% endcomment %}
+{% include 'post.html' with post=post %}
+
+
+
+{% endblock content %} 
+
+
+  
+  
+
+ 
+{% comment %} <div class="post-photos">
+  <img src="photo1.jpg" alt="Photo 1" class="post-photo">
+  <img src="photo2.jpg" alt="Photo 2" class="post-photo">
+  <img src="photo3.jpg" alt="Photo 3" class="post-photo">
+  <div class="post-photo-nav">
+    <i class="fas fa-chevron-left arrow-icon"></i>
+    <i class="fas fa-chevron-right arrow-icon"></i>
+  </div> {% endcomment %}

@@ -1,0 +1,95 @@
+{% load static %}
+{% load posts_extras %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}">
+
+
+
+  <div class="container">
+    <div class="post-container">
+
+      <div class="post-profile" style="justify-content: space-between;">
+
+        <a  href="{% url 'profile' post.author.username %}">
+        <img src="{{post.author.photo.url}}" alt="Profile Photo" >
+        </a>
+
+        <div style="justify-content: flex;">
+          
+          <div class="post-username"> {% if post.author.verified_badge %}<i class="fas fa-check-circle verified-badge"></i>{% endif %}{{post.author.username}}</div>
+          <div class="post-edit-date">{{post.last_edit}}</div>
+        </div>
+
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        
+
+        <div class="post-menu">
+          <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown"></i>
+          <ul class="dropdown-menu">
+            {% if request.user == post.author %}
+            <li><a class="dropdown-item" href="{% url 'edit_post' post.id %}">Edit</a></li>
+            <li><a class="dropdown-item" href="{% url 'delete_post' post.id %}">Delete</a></li>
+            <form method="post" action={% url 'archive_post' post.id %}>
+              {% csrf_token %}
+                
+                  <li> <input name="archivebtn" type="submit" class="dropdown-item" value={% if post.is_active %}"Archive"{% else %}Show on profile{% endif %}> </li>
+                
+            </form>
+            {% else %}
+            <li><a class="dropdown-item" href="#">Hide</a></li>
+            <li><a class="dropdown-item" href="#">Block</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      <div class="post-title">
+        {{post.title}}
+      </div>
+      <div class="post-content">
+        {{post.content}}
+      </div>
+
+
+      <form action={% url 'react' post.id %} method="post">
+      {% csrf_token %}
+      <div class="post-actions">
+        {% comment %} <form method='POST' action={% url 'react' post.id %}>
+          {% csrf_token %} {% endcomment %}
+          {% user_react post request.user as user_react %}
+          <button  {% if user_react == 1 %} class="btn btn-outline-primary " {% else %}class="btn btn-outline-secondary"{% endif %} name="likebtn">
+            <i class="fas fa-thumbs-up" ></i> Like
+            <span class="counter">{{post.get_likes}}</span>
+          </button>
+          &nbsp
+          <button {% if user_react == 2 %} class="btn btn-outline-primary "{% else %}class="btn btn-outline-secondary"{% endif %} name="dislikebtn" >
+            
+            <i class="fas fa-thumbs-down" ></i> Dislike
+            <span class="counter">{{post.get_dislikes}}</span>
+          </div>
+        </form>
+          {% comment %} <div class="post-action-button btn-outline-secondary">
+            <i class="fas fa-comment"></i> Comment
+            <span class="counter">3</span>
+          </div> {% endcomment %}
+        </div>
+
+    </div>
+    </div>
+  </div>
+
+  
+
+  
+  
+
+ 
+{% comment %} <div class="post-photos">
+  <img src="photo1.jpg" alt="Photo 1" class="post-photo">
+  <img src="photo2.jpg" alt="Photo 2" class="post-photo">
+  <img src="photo3.jpg" alt="Photo 3" class="post-photo">
+  <div class="post-photo-nav">
+    <i class="fas fa-chevron-left arrow-icon"></i>
+    <i class="fas fa-chevron-right arrow-icon"></i>
+  </div> {% endcomment %}
