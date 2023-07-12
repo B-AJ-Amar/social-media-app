@@ -33,7 +33,7 @@ def get_image_upload_path(instance, filename):
 class User(AbstractBaseUser,PermissionsMixin):
     username             = models.CharField(primary_key=True,max_length=50,blank=True)
     email                = models.EmailField(unique=True,max_length=320,blank=True)
-    bio             = models.CharField(max_length=250,default="")
+    bio                  = models.CharField(max_length=250,default="")
     photo                = models.ImageField(upload_to= get_image_upload_path,default='user_photos/user_default.png')
     join_date            = models.DateTimeField(blank=True,null=True,default=timezone.now)
     birthday             = models.DateField(null=True)

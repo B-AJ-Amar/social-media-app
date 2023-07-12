@@ -7,9 +7,15 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url="/accounts/login/")
 def home(request):
-    # return HttpResponse("HOTM")
+ 
+    # get all followed by user
+    following = follow.objects.filter(follower=request.user).values_list('following', flat=True)
+    # get eny post created by the privious users (following)
+     # list(set(following)) in this part ,set() to remove duplicated values
+    posts = Post.objects.filter(is_active=True,author__in=list(set(following)))
+    
     return render(request,"pages/home.html",{
-                                                "posts":Post.objects.filter(is_active=True).order_by("-last_edit"),
+                                                "posts":posts.order_by("-last_edit"),
                                                 })
 
 
