@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+  
+
+{% block content %}
+
+ <link rel="stylesheet" href='{% static 'css/profile.css' %}'>
+  {% comment %} <link rel="stylesheet" href='{% static 'css/post.css' %}'>  {% endcomment %}
+  
+  <br>
+  
+  <div class="container">
+    <div class="profile-container">
+      <H2>ABOUT</H2>
+      <p>
+        Welcome to the About page of the Project,  This little Social Media App is powered by Django and represents my first backend project. 
+      </p>
+      <H3>Conctributions</H3>
+      <p>
+        This project is hosted on GitHub, and we welcome contributions from the community. If you're interested in contributing to the development of this app,
+        we invite you to visit our <a  href="https://github.com/Bkz-Amar/social-media-app">GitHub repository</a> to explore the codebase and submit pull requests.
+        Whether you're a seasoned developer or just starting out,your contributions are valuable to us, and we appreciate every effort made to enhance this application.
+      </p>
+      <p>For any inquiries or feedback please reach out to us at bouakazamar91@gmail.com. Thank you!</p>
+      <b>Created By </b>: B A.J Amar
+ 
+    </div>
+      
+  </div>
+  
+  {% for p in posts %}
+  
+    {% include "post.html" with post=p %}
+  {% endfor %}
+  
+  
+  {% endblock %}

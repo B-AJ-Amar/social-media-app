@@ -18,7 +18,8 @@ def home(request):
                                                 "posts":posts.order_by("-last_edit"),
                                                 })
 
-
+def about(request):
+    return render(request,"pages/about.html")
 
 
 
@@ -65,7 +66,3 @@ def search(request):
 
 
 
-
-def about(request):
-    return HttpResponse("ABOUT")
-# Create your views here.
