@@ -4,7 +4,10 @@
 if you want to contribute , or use this project on your local machine you dont have to install eny thing,
 every thing is in `venv` folder .
 
-**Note**: make sure to excute these commands to ceate database 
+**step1**: activate the virtual environment :
+  -  venv\Scripts\Activate
+
+**step2**: make sure to excute these commands to ceate database 
   - python manage.py makemigrations
   - python manage.py migrate
 
