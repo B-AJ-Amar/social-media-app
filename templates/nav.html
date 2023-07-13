@@ -10,19 +10,19 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+            <a class="nav-link {% if "/" == request.path %}active{% endif %}" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'create_post'  %}">New</a>
+            <a class="nav-link  {% if "/posts/create/" == request.path %}active{% endif %}" aria-current="page" href="{% url 'create_post'  %}">New</a>
           </li>
 
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle {% if "/profile/" in request.path or "/archive/" in request.path %}active{% endif %}"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{request.user.username}}
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'profile' request.user.username %}">Profile</a></li>
+            <ul class="dropdown-menu "  >
+              <li><a class="dropdown-item " href="{% url 'profile' request.user.username %}">Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout'  %}">Log Out</a></li>
@@ -33,7 +33,7 @@
           {% else %} 
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle {% if "/accounts/signup/" == request.path or "/accounts/login/" == request.path %}active{% endif %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                Join Us
             </a>
             <ul class="dropdown-menu">
@@ -43,8 +43,8 @@
           </li>
           {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link ">About</a>
+          <li class="nav-item {% if "/about/" == request.path %}active{% endif %}">
+            <a class="nav-link  ">About</a>
           </li>
         </ul>
     {% if request.user.is_authenticated %}
