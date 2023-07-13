@@ -1,5 +1,5 @@
 # social-media-app
-
+This little Social Media App is powered by Django and represents my first backend project. 
 ## Instalation: 
 if you want to contribute , or use this project on your local machine you dont have to install eny thing,
 every thing is in `venv` folder .
