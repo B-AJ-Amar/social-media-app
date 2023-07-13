@@ -18,12 +18,14 @@
         
         <div>
           <div class="profile-username">{% if post.author.verified_badge %}<i class="fas fa-check-circle verified-badge"></i>{% endif %}&nbsp{{user_page.username}}</div>
-          <div class="followers-following">
+            <div class="followers-following">
               <div>Followers  &nbsp</div>
               <div class="followers-count">{{user_page.get_followers}}</div>
+            </div>
+            <div class="followers-following">
               <div>Following  &nbsp</div>
               <div class="following-count">{{user_page.get_followings}}</div>
-          </div>
+            </div>
         </div>
         <div class="post-menu">
             <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown"></i>
