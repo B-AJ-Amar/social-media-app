@@ -43,8 +43,8 @@
           </li>
           {% endif %}
 
-          <li class="nav-item {% if "/about/" == request.path %}active{% endif %}">
-            <a class="nav-link" href="{% url 'about'  %}">About</a>
+          <li class="nav-item">
+            <a class="nav-link {% if "/about/" == request.path %}active{% endif %}" href="{% url 'about'  %}">About</a>
           </li>
         </ul>
     {% if request.user.is_authenticated %}

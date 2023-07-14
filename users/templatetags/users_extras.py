@@ -10,5 +10,5 @@ register = template.Library()
 
 @register.simple_tag
 def is_follower(user1,user2):
-        return follow.objects.filter(follower=user1,following=user2).exists()
+        return Follow.objects.filter(follower=user1,following=user2).exists()
        

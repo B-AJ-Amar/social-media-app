@@ -53,16 +53,16 @@ class User(AbstractBaseUser,PermissionsMixin):
     
     
     def get_followers(self):
-        return follow.objects.filter(following=self).count()
+        return Follow.objects.filter(following=self).count()
     
     def get_followings(self):
-        return follow.objects.filter(follower=self).count()
+        return Follow.objects.filter(follower=self).count()
 
 
 
 
 
-class follow(models.Model):
+class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE,related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE,related_name='following')
     

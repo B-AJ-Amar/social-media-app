@@ -21,4 +21,4 @@ class UserAdmin(UserAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(follow)
+admin.site.register(Follow)

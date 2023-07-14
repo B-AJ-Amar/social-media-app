@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from users.models import User,follow
+from users.models import User,Follow
 from posts.models import Post
 from django.contrib.auth.decorators import login_required
 
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 def home(request):
  
     # get all followed by user
-    following = follow.objects.filter(follower=request.user).values_list('following', flat=True)
+    following = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
     # get eny post created by the privious users (following)
      # list(set(following)) in this part ,set() to remove duplicated values
     posts = Post.objects.filter(is_active=True,author__in=list(set(following)))
@@ -33,7 +33,7 @@ def profile(request,username):
                
                }
     if user != request.user:
-        if follow.objects.filter(follower=request.user,following=user).exists():
+        if Follow.objects.filter(follower=request.user,following=user).exists():
             context[ "follow" ] = True
     # return HttpResponse(f"{context['follow']}")
     return render(request,"pages/profile.html",context)

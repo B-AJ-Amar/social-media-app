@@ -155,10 +155,10 @@ def signup(request):
 @login_required(login_url="/accounts/login/")
 def un_follow(request,username,*args):
     if request.method == "POST" and ( ("un_followbtn"  in request.POST) or( "un_follow_sr_btn" in request.POST))  :
-        if follow.objects.filter(follower=request.user,following=username).exists():
-            follow.objects.filter(follower=request.user,following=username).delete()
+        if Follow.objects.filter(follower=request.user,following=username).exists():
+            Follow.objects.filter(follower=request.user,following=username).delete()
         else :
-            follow.objects.create(follower=request.user,following= User.objects.get(username=username))
+            Follow.objects.create(follower=request.user,following= User.objects.get(username=username))
     
         return redirect(f"/profile/{username}")
     return render(request,"nav.html")
