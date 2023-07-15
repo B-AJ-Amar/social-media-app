@@ -22,13 +22,13 @@
 
 
         {% if messages%}
-        {% for m in messages %}
-            <div class="alert alert-{{msg.tags}}" role="alert">
-                {{m}}
-            </div>
-        {% endfor%}
-        {% endif%}
-
+            {% for m in messages %}
+              <div class="alert alert-{{m.tags}} alert-dismissible fade show" role="alert" style="max-width: 600px;margin: auto;">
+                 {{m}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>        
+            {% endfor%}
+          {% endif%}
         
         
 

@@ -2,9 +2,8 @@ from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout ,get_user_model
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
+from .extra import *
 
-import re
 from .models import *
 from posts.models import *
 
@@ -69,74 +68,46 @@ def signup(request):
         return redirect("/") 
     
     if request.method == "POST" and "signupbtn" in  request.POST  :
-
-        email_pattern = r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+' 
         
-        t_username    = None
-        t_email       = None
-        t_password    = None
-        t_re_password = None
-        t_birthday    = None
-        t_gender      = None
+        t_username    = request.POST.get("username", None)
+        t_email       = request.POST.get("email", None)
+        t_password    = request.POST.get("password", None)
+        t_re_password = request.POST.get("re_password", None)
+        t_birthday    = request.POST.get("birthday", None)
+        t_gender      = request.POST.get("gender", None)
            
-        # check if vvrs exist 
-        if "username" in request.POST :
-            t_username =request.POST["username"]
-            
-        if  "password" in request.POST:
-            t_password =request.POST["password"]
-            
-        if  "re_password" in request.POST:
-            t_re_password =request.POST["re_password"]
-            
-        if  "email" in request.POST :
-            t_email = request.POST["email"]
         
-        if  "gender" in request.POST :
-            t_birthday = request.POST["birthday"]
-        
-        if  "gender" in request.POST :
-            t_gender = request.POST["gender"]
-            
         if t_username and t_password and t_re_password and t_email and t_birthday and t_gender : 
             # ! username token
             if  User.objects.filter(username=t_username).exists():
                 messages.error(request,"username token")    
             else :
-                # ! email token
-                if User.objects.filter(email=t_email).exists():
+                # ! email 
+                if is_email_valid(t_email):
                     messages.error(request,"email token") 
                 else:
-                    # ! email format 
-                    if  not re.match(email_pattern, t_email):
+                    # !  password
+                    is_pass_valid = is_password_valid() 
+                    if is_pass_valid :
                         messages.error(request,"wrong email ") 
                     else :
-                        # ! same password
-                        if  t_password !=  t_re_password:
-                            messages.error(request,"password not match")          
-                        else :
-                            # ! short password
-                            if len(t_password)<8:
-                                messages.error(request,"short password")
-                            else :
-                                if timezone.now().year - int(str(t_birthday).split("-")[0]) < 13:
-                                    messages.warning(request," age")
-                                else:
-                                    
-                                    user = User.objects.create_user(
-                                        username=t_username,
-                                        email=t_email,
-                                        birthday=t_birthday,
-                                        password=t_password,
-                                        gender= True if t_gender=="male" else False
-                                        )
-                                
-                                    messages.success(request,"added successesfuly")  
-                                    return redirect("login")  
-                                            
+                        if  is_birthday_valid(t_birthday) :
+                            messages.warning(request," age")
+                        else:
+                            
+                            user = User.objects.create_user(
+                                username=t_username,
+                                email=t_email,
+                                birthday=t_birthday,
+                                password=t_password,
+                                gender= True if t_gender=="male" else False
+                                )
+                        
+                            messages.success(request,"added successesfuly")  
+                            return redirect("login")  
+                                        
         else:
             messages.error(request,f"empty feilds")
-        messages.error(request,f"empty feilds, {request.POST} ")
         context = {"name":t_username,
                    "email":t_email,
                    "pass1":t_password,
