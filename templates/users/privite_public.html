@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+  
+
+{% block content %}
+
+  <link rel="stylesheet" href='{% static 'css/profile.css' %}'>
+  {% comment %} <link rel="stylesheet" href='{% static 'css/post.css' %}'>  {% endcomment %}
+  
+  <br>
+  
+  <div class="container">
+    <div class="profile-container">
+      {% if user_page.is_privite %}
+      <h4>Do you want make your account Public ?</h4>
+      <p>
+        if you make your account Public the eny one can see your posts , followers ,following ...
+      </p>
+      <p>
+        <b>warning :</b>if you do this then eny one in the requests will be confirmed
+      </p>
+    {% else %}
+      <h4>Do you want make your account privite ?</h4>
+      <p>
+        if you make your account privite the only your followers can see your posts , followers ,following ...
+      </p>
+
+    {% endif %}
+  
+    <form method="post" action={% url 'privite_public' user_page.username %}>
+      {% csrf_token %}
+      <button name="confirmbtn" type="submit" class="btn btn-success">Confirm</button>
+      <button name="cancelbtn" type="submit" class="btn btn-secondary">Cancel</button>
+    </form>
+    </div>
+
+      
+  </div>
+  
+  {% for p in posts %}
+  
+    {% include "post.html" with post=p %}
+  {% endfor %}
+  
+  
+  {% endblock %}

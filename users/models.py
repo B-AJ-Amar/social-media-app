@@ -43,6 +43,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_superuser         = models.BooleanField(blank=True,null=True,default=False)
     is_admin             = models.BooleanField(blank=True,null=True,default=False)
     is_staff             = models.BooleanField(blank=True,null=True,default=False)
+    is_privite           = models.BooleanField(blank=True,null=True,default=False)
     # last_login
     # password 
     

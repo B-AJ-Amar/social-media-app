@@ -6,6 +6,7 @@ urlpatterns = [
     path('signup/',signup,name="signup"),
     path('logout/',logout,name="logout"),
     path('un_follow/<str:username>',un_follow,name="un_follow"),
+    path('privite_public/<str:username>',privite_public,name="privite_public"),
     path('reset_password/<str:username>',reset_password,name="reset_password"),
     path('delete/<str:username>',delete,name="delete_account"),
 ]

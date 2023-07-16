@@ -183,8 +183,6 @@ def delete(request,username):
      
     if request.method == "POST" and "deleteaccountbtn" in request.POST:
         
-        
-        
         User.objects.get(username=username).is_active = False
         
         # desactivate all posts
@@ -198,9 +196,26 @@ def delete(request,username):
         # delete all reactions 
         for r in ur:
             r.delete()
-           
-        
-        
     
         return redirect(f"/profile/{username}")
     
+    
+
+@login_required(login_url="/accounts/login/")
+def privite_public(request,username):
+    if request.user.username != username:
+        return redirect("/")
+    
+    user = User.objects.get(username=username)
+    if request.method == "GET":
+        return render(request,"users/privite_public.html",context={"user_page":user})
+        
+    if request.method == "POST" and "confirmbtn" in request.POST:
+        pass
+        user.is_privite = False if user.is_privite else True
+        user.save()
+        
+       
+    
+    return redirect(f"/profile/{username}")
+        

@@ -34,7 +34,8 @@
               <li><a class="dropdown-item" href="#">Edit Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'reset_password' request.user.username %}">Reset Password</a></li>
               <li><a class="dropdown-item" href="#">Delete Account</a></li>
-              <li><a class="dropdown-item" href="#">make it privite</a></li>
+
+              <li><a class="dropdown-item" href="{% url 'privite_public' user_page.username %}">make it {% if user_page.is_privite %}Public{% else %}privite {% endif %}</a></li>
               {% else %}
               <li><a class="dropdown-item" href="#">Block</a></li>
               <li><a class="dropdown-item" href="#">Report</a></li>
