@@ -9,10 +9,12 @@ from django.contrib.auth.decorators import login_required
 def home(request):
  
     # get all followed by user
-    following = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
+    following = list(set(Follow.objects.filter(follower=request.user).values_list('following', flat=True)))
+    
+    following.append(request.user.username)
     # get eny post created by the privious users (following)
      # list(set(following)) in this part ,set() to remove duplicated values
-    posts = Post.objects.filter(is_active=True,author__in=list(set(following)))
+    posts = Post.objects.filter(is_active=True,author__in=following)
     
     return render(request,"pages/home.html",{
                                                 "posts":posts.order_by("-last_edit"),
@@ -27,8 +29,12 @@ def about(request):
 def profile(request,username):
     
     user = User.objects.get(username=username)
+    if user != request.user and user.is_privite  and not Follow.objects.filter(follower=request.user,following=user).exists():
+         posts = None
+    else:
+        posts =  Post.objects.filter(author=user,is_active=True).order_by("-created")
     context = {"user_page" : user,
-               "posts"     : Post.objects.filter(author=user,is_active=True).order_by("-created"),
+               "posts"     : posts,
                "follow"    : False,
                
                }

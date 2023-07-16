@@ -211,7 +211,6 @@ def privite_public(request,username):
         return render(request,"users/privite_public.html",context={"user_page":user})
         
     if request.method == "POST" and "confirmbtn" in request.POST:
-        pass
         user.is_privite = False if user.is_privite else True
         user.save()
         

@@ -58,11 +58,20 @@
       
     </div>
   </div>
+  {% if posts %}
+    {% for p in posts %}
+    
+      {% include "post.html" with post=p %}
+    {% endfor %}
+  {% else %}
+  <div class="container">
+    <div class="profile-container">
+      privite account <a href="#">learn more</a>
+    </div>
+  </div>
   
-  {% for p in posts %}
   
-    {% include "post.html" with post=p %}
-  {% endfor %}
-  
+  {% endif %}
+
   
   {% endblock %}
