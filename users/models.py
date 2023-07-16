@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,Permissi
 from django.utils import timezone
 import os
 
+
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -62,7 +63,6 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 
 
-
 class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE,related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE,related_name='following')
@@ -72,5 +72,9 @@ class Follow(models.Model):
 
 
 
-
-
+class FollowrRquests(models.Model):
+    reciver = models.ForeignKey(User, on_delete=models.CASCADE,related_name='reciver')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name='sender')
+    
+    def __str__(self) :
+        return f"{self.reciver}:{self.sender}"
