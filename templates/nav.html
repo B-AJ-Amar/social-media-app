@@ -26,6 +26,7 @@
               {% if request.user.is_privite %}
               <li><a class="dropdown-item" href="{% url 'requests' request.user.username %}">Requests</a></li>
               {% endif %}
+              <li><a class="dropdown-item" href="{% url 'blocked_list' request.user.username %}">Blocked List</a></li>
               <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout'  %}">Log Out</a></li>

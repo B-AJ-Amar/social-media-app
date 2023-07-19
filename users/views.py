@@ -247,8 +247,14 @@ def privite_public(request,username):
     if request.method == "POST" and "confirmbtn" in request.POST:
         user.is_privite = False if user.is_privite else True
         user.save()
-        
-       
-    
     return redirect(f"/profile/{username}")
-        
+
+
+@login_required(login_url="/accounts/login/")
+def blocked_list(request,username,*args):
+    if  request.method == "GET"  : 
+        bc_users = list(Block.objects.filter(blocker=request.user).values_list('blocked', flat=True))
+        bc_users = User.objects.filter(is_active=True,username__in=bc_users)
+        return render(request,"pages/blocked_list.html",{"blocked_list":bc_users}) 
+    
+    

@@ -65,13 +65,13 @@
   </style>
 
   <div class="container">
-    <h2>Requests</h2>
+    <h2>Blocked List</h2>
 
     <div class="profile-container">
         {% if rq_users %}
         
    
-        {% for user in rq_users %}
+        {% for user in blocked_list %}
         
             <div class="profile">
             
@@ -89,14 +89,15 @@
                 {% if request.user != user %}
                     <form method='POST' action={% url 'requests_response' user.username  %}>
                         {% csrf_token %}
-                        <button name="confirm_btn"  class="btn btn-outline-success follow-button"> Confirm  </button>
-                        <button name="ignore_btn" class="btn btn-outline-danger follow-button">Ignore </button>
+                        <button name="unblock_btn"  class="btn btn-outline-danger follow-button"> Unblock </button>
+                        
                     </form>
                 {% else %}
                     <br>
                 {% endif %}
             </div>
         {% endfor %}
+        
         {% endif %}
       {% comment %} <div class="profile">
         <img src="profile2.jpg" alt="Profile 2" class="profile-photo">
