@@ -129,7 +129,14 @@ def un_follow(request,username,*args):
         if Follow.objects.filter(follower=request.user,following=username).exists():
             Follow.objects.filter(follower=request.user,following=username).delete()
         else :
-            Follow.objects.create(follower=request.user,following= User.objects.get(username=username))
+            user =  User.objects.get(username=username)
+            if user.is_privite:
+                if FollowrRquests.objects.filter(sender=request.user,reciver=user).exists():
+                    FollowrRquests.objects.filter(sender=request.user,reciver=user).delete()
+                else:
+                    FollowrRquests.objects.create(sender=request.user,reciver=user)
+            else:
+                Follow.objects.create(follower=request.user,following=user)
     
         return redirect(f"/profile/{username}")
     return render(request,"nav.html")

@@ -87,7 +87,9 @@
                 {% if request.user != user %}
                     <form method='POST' action={% url 'un_follow' user.username  %}>
                         {% csrf_token %}
-                        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow{% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+                        {% is_follower request.user user  as is_follower %}
+                        {% is_requested request.user user  as is_requested %}
+                        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
                     </form>
                 {% else %}
                     <br>
