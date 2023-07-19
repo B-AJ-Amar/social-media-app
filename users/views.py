@@ -30,7 +30,7 @@ def login(request):
 
             
         user = authenticate(request, username=Ausername, password=Apassword)
-        if user is not None:
+        if user is not None and user.is_active:
             if  "remember" not in request.POST:
                 request.session.set_expiry(0)
             auth_login(request, user)
@@ -233,7 +233,8 @@ def delete(request,username):
             for r in ur:
                 r.delete()
         
-            return redirect(f"/profile/{username}")
+            auth_logout(request)
+            return redirect("/accounts/login") 
         else:
             messages.error(request,"something went wrong")
             return render(request,"users/delete_account.html")
