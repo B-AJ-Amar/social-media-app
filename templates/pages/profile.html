@@ -33,7 +33,7 @@
               {% if request.user == user_page %}
               <li><a class="dropdown-item" href="#">Edit Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'reset_password' request.user.username %}">Reset Password</a></li>
-              <li><a class="dropdown-item" href="#">Delete Account</a></li>
+              <li><a class="dropdown-item" href="{% url 'delete_account' request.user %}">Delete Account</a></li>
 
               <li><a class="dropdown-item" href="{% url 'privite_public' user_page.username %}">Make it {% if user_page.is_privite %}Public{% else %}privite {% endif %}</a></li>
               {% else %}
@@ -54,7 +54,7 @@
         {% is_follower request.user user_page  as is_follower %}
         {% is_requested request.user user_page  as is_requested %}
 
-        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested %} class="btn btn-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
       </form>
       {% endif %}
       

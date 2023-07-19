@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+  
+
+{% block content %}
+
+  <link rel="stylesheet" href='{% static 'css/profile.css' %}'>
+  {% comment %} <link rel="stylesheet" href='{% static 'css/post.css' %}'>  {% endcomment %}
+  
+  <br>
+  
+  <div class="container">
+    <div class="profile-container">
+    
+      <h4>Do you want <b>DELETE</b> your account ?</h4>
+      <p> 
+        <b>warning :</b>Once your account is deleted, there will be no possibility of recovering it.
+      </p>
+      
+  
+    <form method="post" action={% url 'delete_account' request.user.username %}>
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="username" class="form-label">to delete type :"{{request.user}}" </label>
+        <input name="confirminput" type="username" class="form-control" id="username" placeholder="">
+      </div>
+      <button name="deleteaccountbtn" type="submit" class="btn btn-danger">Confirm</button>
+      <button name="cancelbtn" type="submit" class="btn btn-secondary">Cancel</button>
+    </form>
+    </div>
+
+      
+  </div>
+  
+  {% endblock %}

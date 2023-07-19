@@ -87,7 +87,7 @@ def signup(request):
                     messages.error(request,"email token") 
                 else:
                     # !  password
-                    is_pass_valid = is_password_valid() 
+                    is_pass_valid = is_password_valid(t_password,t_re_password) 
                     if is_pass_valid :
                         messages.error(request,"wrong email ") 
                     else :
@@ -103,7 +103,8 @@ def signup(request):
                                 gender= True if t_gender=="male" else False
                                 )
                         
-                            messages.success(request,"added successesfuly")  
+                            messages.success(request,"added successesfuly") 
+                            # Follow.objects.create(follower=user,following="amar") 
                             return redirect("login")  
                                         
         else:
@@ -216,23 +217,30 @@ def delete(request,username):
          return redirect(f"/profile/{request.user.username}")
      
     if request.method == "POST" and "deleteaccountbtn" in request.POST:
-        
-        User.objects.get(username=username).is_active = False
-        
-        # desactivate all posts
-        up = Post.objects.filter(author=username)
-        for p in up:
-            p.is_active = False
-            p.save()
+        cn = request.POST.get("confirminput",None)
+        if cn == request.user.username :
+            User.objects.get(username=username).is_active = False
             
-        ur = Reaction.objects.filter(user_id=username)
+            # desactivate all posts
+            up = Post.objects.filter(author=username)
+            for p in up:
+                p.is_active = False
+                p.save()
+                
+            ur = Reaction.objects.filter(user_id=username)
+            
+            # delete all reactions 
+            for r in ur:
+                r.delete()
         
-        # delete all reactions 
-        for r in ur:
-            r.delete()
-    
-        return redirect(f"/profile/{username}")
-    
+            return redirect(f"/profile/{username}")
+        else:
+            messages.error(request,"something went wrong")
+            return render(request,"users/delete_account.html")
+            
+    if  request.method == "GET":
+        return render(request,"users/delete_account.html")
+         
     
 
 @login_required(login_url="/accounts/login/")
