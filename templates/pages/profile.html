@@ -48,13 +48,13 @@
         {{user_page.bio}}
       </div>
 
-      {% if request.user.username not in request.path %}
+      {% if request.user.username !=  user_page.username%}
       <form method='POST' action={% url 'un_follow' user_page.username %}>
         {% csrf_token %}
         {% is_follower request.user user_page  as is_follower %}
         {% is_requested request.user user_page  as is_requested %}
 
-        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested %} class="btn btn-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested %} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
       </form>
       {% endif %}
       
