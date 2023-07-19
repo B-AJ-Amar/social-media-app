@@ -66,11 +66,15 @@
       {% include "post.html" with post=p %}
     {% endfor %}
   {% else %}
-  <div class="container">
-    <div class="profile-container">
-      privite account <a href="#">learn more</a>
+    {% if user_page.is_privite %}
+    
+    
+    <div class="container">
+      <div class="profile-container">
+        privite account <a href="#">learn more</a>
+      </div>
     </div>
-  </div>
+    {% endif %}
   
   
   {% endif %}

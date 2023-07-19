@@ -65,12 +65,13 @@
   </style>
 
   <div class="container">
-    <h2>Search Results</h2>
+    <h2>Requests</h2>
 
     <div class="profile-container">
-        {% for user in sr_users %}
-            {% is_follower request.user user  as is_follower %}
-            {% is_requested request.user user  as is_requested %}
+        {% if rq_users %}
+        
+   
+        {% for user in rq_users %}
         
             <div class="profile">
             
@@ -86,15 +87,17 @@
                 </span>
 
                 {% if request.user != user %}
-                    <form method='POST' action={% url 'un_follow' user.username  %}>
+                    <form method='POST' action={% url 'requests_response' user.username  %}>
                         {% csrf_token %}
-                        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+                        <button name="confirm_btn"  class="btn btn-outline-success follow-button"> Confirm  </button>
+                        <button name="ignore_btn" class="btn btn-outline-danger follow-button">Ignore </button>
                     </form>
                 {% else %}
                     <br>
                 {% endif %}
             </div>
         {% endfor %}
+        {% endif %}
       {% comment %} <div class="profile">
         <img src="profile2.jpg" alt="Profile 2" class="profile-photo">
         <i class="fa fa-check verified-icon" aria-hidden="true"></i>

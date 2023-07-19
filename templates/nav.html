@@ -24,7 +24,7 @@
             <ul class="dropdown-menu "  >
               <li><a class="dropdown-item " href="{% url 'profile' request.user.username %}">Profile</a></li>
               {% if request.user.is_privite %}
-              <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">Requests</a></li>
+              <li><a class="dropdown-item" href="{% url 'requests' request.user.username %}">Requests</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
               <li><hr class="dropdown-divider"></li>

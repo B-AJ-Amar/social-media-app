@@ -125,21 +125,48 @@ def signup(request):
 
 @login_required(login_url="/accounts/login/")
 def un_follow(request,username,*args):
-    if request.method == "POST" and ( ("un_followbtn"  in request.POST) or( "un_follow_sr_btn" in request.POST))  :
-        if Follow.objects.filter(follower=request.user,following=username).exists():
-            Follow.objects.filter(follower=request.user,following=username).delete()
-        else :
-            user =  User.objects.get(username=username)
-            if user.is_privite:
-                if FollowrRquests.objects.filter(sender=request.user,reciver=user).exists():
-                    FollowrRquests.objects.filter(sender=request.user,reciver=user).delete()
+    if request.method == "POST"  :
+        user =  User.objects.get(username=username)
+        if ( ("un_followbtn"  in request.POST) or( "un_follow_sr_btn" in request.POST)):
+            fr = Follow.objects.filter(follower=request.user,following=user)
+            if fr.exists():
+                fr.delete()
+            else :   
+                if user.is_privite:
+                    fr = FollowrRquests.objects.filter(sender=request.user,reciver=user)
+                    if fr.exists():
+                        fr.delete()
+                    else:
+                        FollowrRquests.objects.create(sender=request.user,reciver=user)
                 else:
-                    FollowrRquests.objects.create(sender=request.user,reciver=user)
-            else:
-                Follow.objects.create(follower=request.user,following=user)
-    
-        return redirect(f"/profile/{username}")
+                    Follow.objects.create(follower=request.user,following=user)
+        
+            return redirect(f"/profile/{username}")
     return render(request,"nav.html")
+
+
+    
+@login_required(login_url="/accounts/login/")
+def requests(request,username,*args):
+    if  request.method == "GET"  : 
+        rq_users = list(FollowrRquests.objects.filter(reciver=request.user).values_list('sender', flat=True))
+        rq_users = User.objects.filter(is_active=True,username__in=rq_users)
+        return render(request,"pages/requests.html",{"rq_users":rq_users}) 
+    
+@login_required(login_url="/accounts/login/")
+def requests_response(request,username,*args):
+    if request.method == "POST":    
+        user =  User.objects.get(username=username) 
+        if  ("confirm_btn"  in request.POST) :
+            Follow.objects.create(follower=user,following=request.user)
+            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
+            messages.success(request,"donne")
+        elif  "ignore_btn" in request.POST:
+            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
+            messages.info(request,"ignored")
+        return redirect(f"/accounts/requests/{request.user}")
+    
+    
     
     
     
