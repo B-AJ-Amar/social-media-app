@@ -78,3 +78,10 @@ class FollowrRquests(models.Model):
     
     def __str__(self) :
         return f"{self.reciver}:{self.sender}"
+
+class Block(models.Model):
+    blocker = models.ForeignKey(User, on_delete=models.CASCADE,related_name='blocker')
+    blocked = models.ForeignKey(User, on_delete=models.CASCADE,related_name='blocked')
+    
+    def __str__(self) :
+        return f"{self.blocker}:{self.blocked}"
