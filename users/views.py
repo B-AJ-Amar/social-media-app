@@ -257,4 +257,12 @@ def blocked_list(request,username,*args):
         bc_users = User.objects.filter(is_active=True,username__in=bc_users)
         return render(request,"pages/blocked_list.html",{"blocked_list":bc_users}) 
     
+    if  request.method == "POST"  :
+        try: 
+            user = User.objects.get(username=username)
+        except:
+            return HttpResponse("user not found")
+        Block.objects.create(blocker=request.user,blocked=user)
+        return redirect(f"/accounts/blocked_list/{request.user.username}") 
+    
     
