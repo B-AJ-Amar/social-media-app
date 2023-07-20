@@ -265,6 +265,12 @@ def blocked_list(request,username,*args):
         if "unblock_btn" in request.POST:
             Block.objects.filter(blocker=request.user,blocked=user).delete()
         elif "blockbtn"  in request.POST :
+            try :
+                Follow.objects.filter(fllower=request.user,following=user).delete()
+            except: pass
+            try :
+                Follow.objects.filter(fllower=request.user,following=user).delete()
+            except: pass
             Block.objects.create(blocker=request.user,blocked=user)
         return redirect(f"/accounts/blocked_list/{request.user.username}") 
     
