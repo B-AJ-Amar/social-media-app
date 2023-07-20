@@ -266,4 +266,21 @@ def blocked_list(request,username,*args):
         bc_users = User.objects.filter(is_active=True,username__in=bc_users)
         return render(request,"pages/blocked_list.html",{"blocked_list":bc_users}) 
     
+    if  request.method == "POST"  :
+        try: 
+            user = User.objects.get(username=username)
+        except:
+            return HttpResponse("user not found")
+        if "unblock_btn" in request.POST:
+            Block.objects.filter(blocker=request.user,blocked=user).delete()
+        elif "blockbtn"  in request.POST :
+            try :
+                Follow.objects.filter(fllower=request.user,following=user).delete()
+            except: pass
+            try :
+                Follow.objects.filter(fllower=request.user,following=user).delete()
+            except: pass
+            Block.objects.create(blocker=request.user,blocked=user)
+        return redirect(f"/accounts/blocked_list/{request.user.username}") 
+    
     

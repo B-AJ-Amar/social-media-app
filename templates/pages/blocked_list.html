@@ -68,7 +68,7 @@
     <h2>Blocked List</h2>
 
     <div class="profile-container">
-        {% if rq_users %}
+        {% if blocked_list %}
         
    
         {% for user in blocked_list %}
@@ -87,7 +87,7 @@
                 </span>
 
                 {% if request.user != user %}
-                    <form method='POST' action={% url 'requests_response' user.username  %}>
+                    <form method='POST' action={% url 'blocked_list' user.username  %}>
                         {% csrf_token %}
                         <button name="unblock_btn"  class="btn btn-outline-danger follow-button"> Unblock </button>
                         
