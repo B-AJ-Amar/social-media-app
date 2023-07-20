@@ -14,6 +14,5 @@ every thing is in `venv` folder .
 
 
 ## Contributing
-
  We welcome contributions from the community if you're interested in contributing to the development of this app,
 Whether you're a seasoned developer or just starting out,your contributions are valuable to us,and we appreciate every effort made to enhance this application.
