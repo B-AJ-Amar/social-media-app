@@ -262,7 +262,10 @@ def blocked_list(request,username,*args):
             user = User.objects.get(username=username)
         except:
             return HttpResponse("user not found")
-        Block.objects.create(blocker=request.user,blocked=user)
+        if "unblock_btn" in request.POST:
+            Block.objects.filter(blocker=request.user,blocked=user).delete()
+        elif "blockbtn"  in request.POST :
+            Block.objects.create(blocker=request.user,blocked=user)
         return redirect(f"/accounts/blocked_list/{request.user.username}") 
     
     
