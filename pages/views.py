@@ -61,6 +61,7 @@ def search(request):
             result = request.GET['searchbar']
             
         exc = list(Block.objects.filter(blocker=request.user).values_list('blocked', flat=True))
+        exc.extend(list(Block.objects.filter(blocked=request.user).values_list('blocker', flat=True))) 
         results = {
             "sr_users"    :  User.objects.filter(username__icontains=result,is_active=True).exclude(username__in= exc ),
             "sr_posts"    :  Post.objects.filter(content__icontains=result,is_active=True).exclude(author__in= exc),
