@@ -269,7 +269,13 @@ def blocked_list(request,username,*args):
                 Follow.objects.filter(fllower=request.user,following=user).delete()
             except: pass
             try :
-                Follow.objects.filter(fllower=request.user,following=user).delete()
+                Follow.objects.filter(fllower=user,following=request.user).delete()
+            except: pass
+            try :
+                FollowrRquests.objects.filter(sender=request.user,reciver=user).delete()
+            except: pass
+            try :
+                FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
             except: pass
             Block.objects.create(blocker=request.user,blocked=user)
         return redirect(f"/accounts/blocked_list/{request.user.username}") 
