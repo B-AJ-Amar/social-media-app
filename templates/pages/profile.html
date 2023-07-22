@@ -18,6 +18,8 @@
         
         <div>
           <div class="profile-username">{% if post.author.verified_badge %}<i class="fas fa-check-circle verified-badge"></i>{% endif %}&nbsp{{user_page.username}}</div>
+          <div class="post-edit-date">{{user_page.join_date}}</div>
+          <br>
             <div class="followers-following">
               <div>Followers  &nbsp</div>
               <div class="followers-count">{{user_page.get_followers}}</div>
@@ -27,6 +29,7 @@
               <div class="following-count">{{user_page.get_followings}}</div>
             </div>
         </div>
+        <div >
         <div class="post-menu">
             <i class="fas fa-ellipsis-v" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu">
@@ -45,7 +48,11 @@
 
               {% endif %}
             </ul>
+              <br><br><br><br><br><br>
+          
           </div>
+        </div>
+          
       </div>
       <div class="profile-bio">
         {{user_page.bio}}
