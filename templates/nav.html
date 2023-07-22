@@ -1,3 +1,5 @@
+{% load static %}
+{% load users_extras %}
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark bg-dark ">
     <div class="container-fluid">
@@ -24,7 +26,8 @@
             <ul class="dropdown-menu "  >
               <li><a class="dropdown-item " href="{% url 'profile' request.user.username %}">Profile</a></li>
               {% if request.user.is_privite %}
-              <li><a class="dropdown-item" href="{% url 'requests' request.user.username %}">Requests</a></li>
+              
+              <li>{% requests_conut request.user  as requests_conut %}<a class="dropdown-item" href="{% url 'requests' request.user.username %}">Requests {{requests_conut}}</a></li>
               {% endif %}
               <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
               <li><hr class="dropdown-divider"></li>
