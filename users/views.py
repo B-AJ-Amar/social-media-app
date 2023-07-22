@@ -254,7 +254,14 @@ def privite_public(request,username):
         return render(request,"users/privite_public.html",context={"user_page":user})
         
     if request.method == "POST" and "confirmbtn" in request.POST:
-        user.is_privite = False if user.is_privite else True
+        if not user.is_privite:
+            user.is_privite = True
+        else:
+            if FollowrRquests.objects.filter(reciver=request.user).exists():
+                messages.warning(request,"Your account cannot be made public until you have responded to all the follow requests.")
+                return render(request,"users/privite_public.html",context={"user_page":user})
+            else:
+                user.is_privite = False
         user.save()
     return redirect(f"/profile/{username}")
 
