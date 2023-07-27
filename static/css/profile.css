@@ -51,8 +51,8 @@
     color: #dc3545;
   }
 
-  a:link, a:visited {
-    text-decoration: none;
-    color: black;
-    cursor: pointer;
-  }
+  a:link.blacklink, a:visited.blacklink {
+   text-decoration: none;
+   color: black;
+   cursor: pointer;
+}

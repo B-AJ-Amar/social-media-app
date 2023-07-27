@@ -9,7 +9,7 @@
   <link rel="stylesheet" href='{% static 'css/post.css' %}'>
   
   <style>
-    a:link, a:visited {
+     a:link.blacklink, a:visited.blacklink {
       text-decoration: none;
       color: black;
       cursor: pointer;
@@ -28,11 +28,11 @@
           <div class="post-edit-date">{{user_page.join_date}}</div>
           <br>
             <div class="followers-following">
-              <a href="followers/"><div>Followers  &nbsp</div></a>
+              <a class="blacklink" href="followers/"><div>Followers  &nbsp</div></a>
               <div class="followers-count">{{user_page.get_followers}}</div>
             </div>
             <div class="followers-following">
-              <a href="following/"><div>Following  &nbsp</div></a>
+              <a class="blacklink" href="following/"><div>Following  &nbsp</div></a>
               <div class="following-count">{{user_page.get_followings}}</div>
             </div>
         </div>
