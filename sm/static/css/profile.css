@@ -50,3 +50,9 @@
   .options-button:hover {
     color: #dc3545;
   }
+
+  a:link, a:visited {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+  }

@@ -74,4 +74,25 @@ def search(request):
 
 
 
+@login_required(login_url="/accounts/login/")
+def follow(request,username):
+    # user = request.user
+    if request.method == "GET" :
+        user = User.objects.get(username=username)
+        if "/followers" in request.path:
+            title = "Your Followers"  if username == request.user.username else f"{username} Followers"
+            users = list(Follow.objects.filter(following=user).values_list('follower', flat=True))
+        else: 
+            title =  "You Follow" if username == request.user.username else f"{username} Follows"
+            users = list(Follow.objects.filter(follower=user).values_list('following', flat=True))
+            
+        users =  User.objects.filter(username__in=users,is_active=True)
+        results = {
+            "users"        :  users,
+            "user_page"    :  user,
+            "title"        :  title
+        }
+        
+        return render(request,"pages/follow.html",results)
+    
 
