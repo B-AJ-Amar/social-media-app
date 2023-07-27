@@ -282,10 +282,10 @@ def blocked_list(request,username,*args):
             Block.objects.filter(blocker=request.user,blocked=user).delete()
         elif "blockbtn"  in request.POST :
             try :
-                Follow.objects.filter(fllower=request.user,following=user).delete()
+                Follow.objects.get(follower=request.user,following=user).delete()
             except: pass
             try :
-                Follow.objects.filter(fllower=user,following=request.user).delete()
+                Follow.objects.get(follower=user,following=request.user).delete()
             except: pass
             try :
                 FollowrRquests.objects.filter(sender=request.user,reciver=user).delete()
