@@ -2,6 +2,7 @@ from django.shortcuts import render,HttpResponse,redirect
 from users.models import User,Follow,Block
 from posts.models import Post
 from django.contrib.auth.decorators import login_required
+from sm.permisions import *
 
 
 # Create your views here.
@@ -27,9 +28,12 @@ def about(request):
 
 @login_required(login_url="/accounts/login/")
 def profile(request,username):
-    
-    if Block.objects.filter(blocker=request.user,blocked=username).exists() or Block.objects.filter(blocker=username,blocked=request.user).exists(): 
-        return redirect(f"/accounts/blocked_list/{request.user.username}")
+    if is_blocked(request,username):
+        return render(request,"404.html")
+        
+    print(is_blocked(request,username))
+    # if Block.objects.filter(blocker=request.user,blocked=username).exists() or Block.objects.filter(blocker=username,blocked=request.user).exists(): 
+    #     return render(request,"404.html")
     user = User.objects.get(username=username)
     if user != request.user and user.is_privite  and not Follow.objects.filter(follower=request.user,following=user).exists():
          posts = None
@@ -49,7 +53,9 @@ def profile(request,username):
 
 @login_required(login_url="/accounts/login/")
 def archive(request,username):
-     return render(request,"pages/archive.html",context = {"posts":Post.objects.filter(author=username,is_active=False).order_by("-created") })
+    if not is_owner(request,username):
+        return render(request,"404.html")
+    return render(request,"pages/archive.html",context = {"posts":Post.objects.filter(author=username,is_active=False).order_by("-created") })
     
    
 
@@ -77,6 +83,8 @@ def search(request):
 @login_required(login_url="/accounts/login/")
 def follow(request,username):
     # user = request.user
+    if is_blocked(request,username):
+        return render(request,"404.html")
     if request.method == "GET" :
         user = User.objects.get(username=username)
         if "/followers" in request.path:

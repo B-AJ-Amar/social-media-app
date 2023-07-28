@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <style>
+    body {
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: #f8f9fa;
+    }
+    .error-container {
+      text-align: center;
+    }
+    .error-code {
+      font-size: 8rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+    .error-message {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .back-link {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <div class="error-message">Oops! Page not found.</div>
+    <a href="{% url 'home' %}" class="back-link">Go back to the home page</a>
+  </div>
+
+
+{% endblock content %}

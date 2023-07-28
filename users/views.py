@@ -6,6 +6,7 @@ from .extra import *
 
 from .models import *
 from posts.models import *
+from sm.permisions import *
 
 User = get_user_model()
 
@@ -174,8 +175,9 @@ def requests_response(request,username,*args):
     
 @login_required(login_url="/accounts/login/")
 def reset_password(request,username):
-    if request.user.username != username:
-        return redirect("/")
+    if not is_owner(request,username):
+        return render(request,"404.html")
+    
     if request.method == "POST" and "cancelbtn" in request.POST:
          return redirect(f"/profile/{request.user.username}")
     if request.method == "POST" and "resetpasswordbtn" in request.POST:
@@ -211,8 +213,8 @@ def reset_password(request,username):
 
 @login_required(login_url="/accounts/login/")
 def delete(request,username):
-    if request.user.username != username:
-        return redirect("/")
+    if not is_owner(request,username):
+        return render(request,"404.html")
     if request.method == "POST" and "cancelbtn" in request.POST:
          return redirect(f"/profile/{request.user.username}")
      
@@ -246,8 +248,8 @@ def delete(request,username):
 
 @login_required(login_url="/accounts/login/")
 def privite_public(request,username):
-    if request.user.username != username:
-        return redirect("/")
+    if not is_owner(request,username):
+        return render(request,"404.html")
     
     user = User.objects.get(username=username)
     if request.method == "GET":
@@ -268,6 +270,8 @@ def privite_public(request,username):
 
 @login_required(login_url="/accounts/login/")
 def blocked_list(request,username,*args):
+    if not is_owner(request,username):
+        return render(request,"404.html")
     if  request.method == "GET"  : 
         bc_users = list(Block.objects.filter(blocker=request.user).values_list('blocked', flat=True))
         bc_users = User.objects.filter(is_active=True,username__in=bc_users)
