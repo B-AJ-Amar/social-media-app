@@ -7,12 +7,17 @@ This little Social Media App is powered by Django and represents my first backen
 if you want to contribute , or use this project on your local machine you dont have to install eny thing,
 every thing is in `venv` folder .
 
+### from the command line :
 **step1**: activate the virtual environment :
-  -  venv\Scripts\Activate
+  -  `venv\Scripts\activate`
 
 **step2**: make sure to excute these commands to ceate database 
-  - python manage.py makemigrations
-  - python manage.py migrate
+  - `python manage.py makemigrations`
+  - `python manage.py migrate`
+
+**step3**: run the server 
+  - `python manage.py runserver`
+
 
 
 
