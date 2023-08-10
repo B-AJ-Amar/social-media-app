@@ -6,78 +6,9 @@
 
 {% block content %}
 {% comment %} <link rel="stylesheet" href='{% static 'css/profile.css' %}'> {% endcomment %}
-  {% comment %} <link rel="stylesheet" href='{% static 'css/post.css' %}'> {% endcomment %}
+  <link rel="stylesheet" href='{% static 'css/search.css' %}'>
   
-  <style>
-    .search-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 5px;
-  
-    }
-    
-    .profile-container {
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .profile {
-      width: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px;
-    }
-    .profile-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
-    .verified-icon {
-      color: green;
-      margin-bottom: 10px;
-    }
-    .username {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .follow-button {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    .dropdown-menu {
-      min-width: 100px;
-    }
-    .dropdown-item {
-      font-size: 14px;
-    }
-    .more-button-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .verified-badge {
-        color: #28a745;
-        margin-left: 5px;
-      }
-
-      .search-results-container-users {
-        border: 1px solid #dee2e6;
-        border-radius: 5px; 
-
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .search-results-container-posts {
-      {% comment %} border: 1px solid #dee2e6; {% endcomment %}
-      border-top: 0px;
-      border-radius: 5px; 
-  }
-  </style>
+ 
 
   <div class="search-container">
     <h2>Search Results</h2>
@@ -97,31 +28,8 @@
     <!-- users -->
     <div class="search-results-container-users">
         {% for user in sr_users %}
-            {% is_follower request.user user  as is_follower %}
-            {% is_requested request.user user  as is_requested %}
-        
-            <div class="profile">
+        {% include 'user.html' with reqUser=request.user user=user %}
             
-                <a  href="{% url 'profile' user.username %}">
-                    <img src={{user.photo.url}} alt="Profile 1" class="profile-photo">
-                </a>
-                
-                <span class="username">
-                    {% if user.verified_badge %}
-                        <i class="fas fa-check-circle verified-badge"></i>
-                    {% endif %}
-                    {{user.username}}
-                </span>
-
-                {% if request.user != user %}
-                    <form method='POST' action={% url 'un_follow' user.username  %}>
-                        {% csrf_token %}
-                        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
-                    </form>
-                {% else %}
-                    <br>
-                {% endif %}
-            </div>
         {% endfor %}
       </div>
       

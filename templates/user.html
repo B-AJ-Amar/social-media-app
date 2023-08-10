@@ -1,0 +1,33 @@
+{% load static %}
+{% load posts_extras %}
+{% load users_extras %}
+<link rel="stylesheet" href="{% static 'css/user.css' %}">
+
+
+{% is_follower reqUser user  as is_follower %}
+{% is_requested reqUser user  as is_requested %}
+
+<div class="profile">
+    <div class="profile-info">
+        <a  href="{% url 'profile' user.username %}">
+            <img src={{user.photo.url}} alt="Profile 1" class="profile-photo">
+        </a>
+        
+        <span class="username">
+            {% if user.verified_badge %}
+                <i class="fas fa-check-circle verified-badge"></i>
+            {% endif %}
+            {{user.username}}
+        </span>
+    </div>
+
+
+    {% if reqUser != user %}
+    <form method='POST' action={% url 'un_follow' user.username  %}>
+        {% csrf_token %}
+        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+    </form>
+    {% else %}
+        <br>
+    {% endif %}
+</div>
