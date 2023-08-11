@@ -47,10 +47,13 @@
 
               <li><a class="dropdown-item" href="{% url 'privite_public' user_page.username %}">Make it {% if user_page.is_privite %}Public{% else %}privite {% endif %}</a></li>
               {% else %}
-              <form method='POST' action={% url 'blocked_list' user_page.username %}>
-              {% csrf_token %}
-              <li><button name="blockbtn" type="submit"  class="dropdown-item">Block</button></li>
-              </form>
+              <li>
+                <form method='POST' action="{% url 'blocked_list'  %}" >
+                {% csrf_token %}
+                <input type="hidden" name="username" value="{{user_page.username}}" />
+                <button name="block_btn" type="submit"  class="dropdown-item block-unblock-action">Block</button>
+                </form>
+              </li>
               <li><a class="dropdown-item" href="#">Report</a></li>
 
               {% endif %}
@@ -66,12 +69,11 @@
       </div>
 
       {% if request.user.username !=  user_page.username%}
-      <form method='POST' action={% url 'un_follow' user_page.username %}>
+      {% is_follower request.user user_page  as is_follower %}
+      {% is_requested request.user user_page  as is_requested %}
+      <form method='POST' data-url="{% url 'follow'  %}" data-username="{{user_page.username}}"  >
         {% csrf_token %}
-        {% is_follower request.user user_page  as is_follower %}
-        {% is_requested request.user user_page  as is_requested %}
-
-        <button name="un_followbtn" type="submit" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested %} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
+        <button type="button" name="un_followbtn" {% if is_follower  %} class="btn btn-outline-danger user-action-button follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success user-action-button follow-button">Requested {% else %} class="btn btn-success user-action-button follow-button">Follow{% endif %}</button>
       </form>
       {% endif %}
       
@@ -96,5 +98,6 @@
   
   {% endif %}
 
-  
+  <script src="{% static 'js/follow.js' %}"></script>
+  {% comment %} <script src="{% static 'js/block-unblock.js' %}"></script> {% endcomment %}
   {% endblock %}

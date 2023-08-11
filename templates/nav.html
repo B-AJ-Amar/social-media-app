@@ -29,7 +29,7 @@
               
               <li>{% requests_conut request.user  as requests_conut %}<a class="dropdown-item" href="{% url 'requests' request.user.username %}">Requests {{requests_conut}}</a></li>
               {% endif %}
-              <li><a class="dropdown-item" href="{% url 'blocked_list' request.user.username %}">Blocked List</a></li>
+              <li><a class="dropdown-item" href="{% url 'blocked_list' %}">Blocked List</a></li>
               <li><a class="dropdown-item" href="{% url 'archive' request.user.username %}">My Archive</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout'  %}">Log Out</a></li>

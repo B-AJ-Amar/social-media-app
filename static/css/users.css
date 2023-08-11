@@ -5,7 +5,8 @@
 
   }
   
-    .search-results-container-users {
+.search-results-container-users,
+.users-container {
       border: 1px solid #dee2e6;
       border-radius: 5px; 
 

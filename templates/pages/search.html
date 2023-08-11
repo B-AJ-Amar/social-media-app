@@ -5,8 +5,7 @@
 
 
 {% block content %}
-{% comment %} <link rel="stylesheet" href='{% static 'css/profile.css' %}'> {% endcomment %}
-  <link rel="stylesheet" href='{% static 'css/search.css' %}'>
+  <link rel="stylesheet" href='{% static 'css/users.css' %}'>
   
  
 
@@ -28,7 +27,7 @@
     <!-- users -->
     <div class="search-results-container-users">
         {% for user in sr_users %}
-        {% include 'user.html' with reqUser=request.user user=user %}
+        {% include 'user.html' with reqUser=request.user user=user type=1 %}
             
         {% endfor %}
       </div>
@@ -43,8 +42,9 @@
 
     </div>
       
-      <script src="{% static 'js/search.js' %}"></script>
-      {% endblock content %}
+    <script src="{% static 'js/search.js' %}"></script>
+    <script src="{% static 'js/follow.js' %}"></script>
+    {% endblock content %}
       
       {% comment %} <div class="profile">
   <img src="profile2.jpg" alt="Profile 2" class="profile-photo">

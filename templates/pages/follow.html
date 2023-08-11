@@ -7,7 +7,7 @@
 {% block content %}
 {% comment %} <link rel="stylesheet" href='{% static 'css/profile.css' %}'> {% endcomment %}
   {% comment %} <link rel="stylesheet" href='{% static 'css/post.css' %}'> {% endcomment %}
-  
+{% comment %}   
   <style>
     .container {
       max-width: 800px;
@@ -95,19 +95,34 @@
                     <br>
                 {% endif %}
             </div>
-        {% endfor %}
-      {% comment %} <div class="profile">
-        <img src="profile2.jpg" alt="Profile 2" class="profile-photo">
-        <i class="fa fa-check verified-icon" aria-hidden="true"></i>
-        <span class="username">Username 2</span>
-        <button class="btn btn-primary follow-button">Follow</button> 
-      </div> {% endcomment %}
+{% endcomment %}
       
   
 
-    <br>
-    {% comment %} <div class="more-button-container">
-      <button class="btn btn-primary more-button">More</button>
-    </div> {% endcomment %}
-  </div>
+
+  <link rel="stylesheet" href='{% static 'css/user.css' %}'>
+  <link rel="stylesheet" href='{% static 'css/users.css' %}'>
+  
+  <div class="container">
+    <h2>{{title}}</h2>
+
+    
+        {% if users %}
+        
+        <div class="search-results-container-users">
+        {% for user in users %}
+
+          {% include 'user.html' with reqUser=request.user user=user type=1 %}
+
+          
+          
+          {% endfor %}
+          
+        </div>
+        {% endif %}
+
+  
+
+        <script src="{% static 'js/follow.js' %}"></script>
+    </div>
 {% endblock content %}

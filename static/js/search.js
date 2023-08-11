@@ -21,7 +21,7 @@ PostsBtn.addEventListener("click",(e) =>{
         PostsBtn.classList.add("active");
 
         UsersContainer.style.display = "none";
-        PostsContainer.style.display = "flex";
+        PostsContainer.style.display = "block";
 
     }
 })

@@ -5,7 +5,7 @@ from django.shortcuts import render,HttpResponse,redirect
 
 def is_owner(request,username):
     try:
-        if User.objects.get(username=username)!=request.user.username:
+        if username!=request.user.username:
             return 0
         else: return 1
     except: return 0

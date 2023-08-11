@@ -3,11 +3,17 @@
 {% load users_extras %}
 <link rel="stylesheet" href="{% static 'css/user.css' %}">
 
+<style>
+    .user-action-button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+</style>
 
 {% is_follower reqUser user  as is_follower %}
 {% is_requested reqUser user  as is_requested %}
 
-<div class="profile">
+<div class="profile {{user.username}}-profile">
     <div class="profile-info">
         <a  href="{% url 'profile' user.username %}">
             <img src={{user.photo.url}} alt="Profile 1" class="profile-photo">
@@ -15,19 +21,36 @@
         
         <span class="username">
             {% if user.verified_badge %}
-                <i class="fas fa-check-circle verified-badge"></i>
+                <i class="fas fa-check-circle verified-badge-mini-profile "></i>
             {% endif %}
             {{user.username}}
         </span>
     </div>
 
-
-    {% if reqUser != user %}
-    <form method='POST' action={% url 'un_follow' user.username  %}>
-        {% csrf_token %}
-        <button name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success follow-button">Requested {% else %} class="btn btn-success follow-button">Follow{% endif %}</button>
-    </form>
-    {% else %}
+    {% if type == 1 %}
+        {% if reqUser != user %}
+        <form method='POST' data-url="{% url 'follow'  %}" data-username="{{user.username}}" >
+            {% csrf_token %}
+            <button type="button" name="un_follow_sr_btn" {% if is_follower  %} class="btn btn-outline-danger user-action-button follow-button">Unfollow {% elif is_requested%} class="btn btn-outline-success user-action-button follow-button">Requested {% else %} class="btn btn-success user-action-button follow-button">Follow{% endif %}</button>
+        </form>
+        {% else %}
         <br>
+        {% endif %}
+
+    {% elif type == 2 %}
+            <form method='POST' data-url={% url 'blocked_list'  %}  data-username="{{user.username}}">
+                {% csrf_token %}
+                <button type="button" name="unblock_btn"  class="btn btn-outline-danger user-action-button block-unblock-action unblock-button"> Unblock </button>
+            </form>
+    {% elif type == 3 %}
+        <form method='POST' data-url={% url 'requests' reqUser.username  %} data-username="{{user.username}}" >
+            {% csrf_token %}
+            <button type="button" name="confirm_btn"  class="btn btn-outline-success user-action-button requests-button confirm-button"> Confirm  </button>
+            <button type="button" name="ignore_btn" class="btn btn-outline-danger user-action-button requests-button  ignore-button">Ignore </button>
+        </form>
+
     {% endif %}
 </div>
+{% comment %} 1 follow-btn {% endcomment %}
+{% comment %} 1 unblock-btn {% endcomment %}
+{% comment %} 1 confirm-btn+ignore-btn {% endcomment %}

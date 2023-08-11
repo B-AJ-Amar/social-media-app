@@ -1,4 +1,5 @@
-from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
+from django.shortcuts import render,redirect,HttpResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout ,get_user_model
 from django.contrib.auth.decorators import login_required
@@ -123,52 +124,6 @@ def signup(request):
 
 
 # ? follow ======================================================
-
-
-@login_required(login_url="/accounts/login/")
-def un_follow(request,username,*args):
-    if request.method == "POST"  :
-        user =  User.objects.get(username=username)
-        if ( ("un_followbtn"  in request.POST) or( "un_follow_sr_btn" in request.POST)):
-            fr = Follow.objects.filter(follower=request.user,following=user)
-            if fr.exists():
-                fr.delete()
-            else :   
-                if user.is_privite:
-                    fr = FollowrRquests.objects.filter(sender=request.user,reciver=user)
-                    if fr.exists():
-                        fr.delete()
-                    else:
-                        FollowrRquests.objects.create(sender=request.user,reciver=user)
-                else:
-                    Follow.objects.create(follower=request.user,following=user)
-        
-            return redirect(f"/profile/{username}")
-    return render(request,"nav.html")
-
-
-    
-@login_required(login_url="/accounts/login/")
-def requests(request,username,*args):
-    if  request.method == "GET"  : 
-        rq_users = list(FollowrRquests.objects.filter(reciver=request.user).values_list('sender', flat=True))
-        rq_users = User.objects.filter(is_active=True,username__in=rq_users)
-        return render(request,"pages/requests.html",{"rq_users":rq_users}) 
-    
-@login_required(login_url="/accounts/login/")
-def requests_response(request,username,*args):
-    if request.method == "POST":    
-        user =  User.objects.get(username=username) 
-        if  ("confirm_btn"  in request.POST) :
-            Follow.objects.create(follower=user,following=request.user)
-            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
-            messages.success(request,"donne")
-        elif  "ignore_btn" in request.POST:
-            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
-            messages.info(request,"ignored")
-        return redirect(f"/accounts/requests/{request.user}")
-    
-    
     
     
     
@@ -266,25 +221,88 @@ def privite_public(request,username):
                 user.is_privite = False
         user.save()
     return redirect(f"/profile/{username}")
+    
+    
+#! AJAX  =================================
+
+@login_required(login_url="/accounts/login/")
+def follow(request):
+    # 0 : error
+    # 1 : followed
+    # 2 : unfollowed
+    # 3 : requested
+    # 4 : request-canceld
+    
+    if request.method == "POST" :
+        username = request.POST.get("username")
+        try:
+            user =  User.objects.get(username=username)
+        
+            
+            fr = Follow.objects.filter(follower=request.user,following=user)
+            if fr.exists():
+                fr.delete()
+                return JsonResponse({"msg":2},safe=False, status=200)
+            else :   
+                if user.is_privite:
+                    fr = FollowrRquests.objects.filter(sender=request.user,reciver=user)
+                    if fr.exists():
+                        fr.delete()
+                        return JsonResponse({"msg":4},safe=False, status=200)
+                    else:
+                        FollowrRquests.objects.create(sender=request.user,reciver=user)
+                        return JsonResponse({"msg":3},safe=False, status=200)
+                else:
+                    Follow.objects.create(follower=request.user,following=user)
+                    return JsonResponse({"msg":1},safe=False, status=200)
+        except:
+            return JsonResponse({"msg":0})
+       
+    return JsonResponse(status=404)
+
+
+
+    
+@login_required(login_url="/accounts/login/")
+def requests(request,username,*args):
+    if  request.method == "GET"  : 
+        rq_users = list(FollowrRquests.objects.filter(reciver=request.user).values_list('sender', flat=True))
+        rq_users = User.objects.filter(is_active=True,username__in=rq_users)
+        return render(request,"pages/requests.html",{"rq_users":rq_users}) 
+    
+    if request.method == "POST":    
+        btn = request.POST.get("btn")
+        username = request.POST.get("username")
+        user =  User.objects.get(username=username) 
+        if  btn == "confirm_btn"  :
+            Follow.objects.create(follower=user,following=request.user)
+            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
+            return JsonResponse({"msg":1})
+        elif  btn == "ignore_btn" :
+            FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
+            return JsonResponse({"msg":2})
+        return JsonResponse({"msg":0})
+    
 
 
 @login_required(login_url="/accounts/login/")
-def blocked_list(request,username,*args):
-    if not is_owner(request,username):
-        return render(request,"404.html")
+def blocked_list(request):
     if  request.method == "GET"  : 
         bc_users = list(Block.objects.filter(blocker=request.user).values_list('blocked', flat=True))
         bc_users = User.objects.filter(is_active=True,username__in=bc_users)
         return render(request,"pages/blocked_list.html",{"blocked_list":bc_users}) 
     
     if  request.method == "POST"  :
+        btn = request.POST.get("btn")
+        username = request.POST.get("username")
         try: 
-            user = User.objects.get(username=username)
+            user =  User.objects.get(username=username) 
         except:
-            return HttpResponse("user not found")
-        if "unblock_btn" in request.POST:
+            return JsonResponse({"msg":0},status=404)
+        if btn == "unblock_btn":
             Block.objects.filter(blocker=request.user,blocked=user).delete()
-        elif "blockbtn"  in request.POST :
+            return JsonResponse({"msg":1})
+        elif "block_btn" in  request.POST  :
             try :
                 Follow.objects.get(follower=request.user,following=user).delete()
             except: pass
@@ -298,6 +316,8 @@ def blocked_list(request,username,*args):
                 FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
             except: pass
             Block.objects.create(blocker=request.user,blocked=user)
-        return redirect(f"/accounts/blocked_list/{request.user.username}") 
-    
+            print("blocked")
+            return redirect("/accounts/blocked_list/")
+            # print("donne")
+        return JsonResponse({"msg":0})
     
