@@ -16,21 +16,10 @@ buttons.forEach((btn) =>{
         console.log(form,formData,username,ajaxUrl)
 
         formData.append('username', username);
-        console.log(btn.getAttribute("name"))
-        if (btn.getAttribute("name") === "ignore_btn" ){
-            formData.append('btn', "ignore_btn");
-            console.log("in condition 1")
+        formData.append('btn', btn.getAttribute("name"));
+            
 
-        }
-        else if (btn.getAttribute("name") === "ignore_btn" ){
-            formData.append('btn', "ignore_btn");
-            console.log("in condition 2")
-
-        }
-        else{
-            console.log("in condition 3")
-            return 0;
-        }
+      
         var xhr = new XMLHttpRequest();
 
         xhr.open('POST', ajaxUrl, true);
