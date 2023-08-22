@@ -52,32 +52,30 @@
       </div>
 
 
-      <form action={% url 'react' post.id %} method="post">
-      {% csrf_token %}
       <div class="post-actions">
-        {% comment %} <form method='POST' action={% url 'react' post.id %}>
-          {% csrf_token %} {% endcomment %}
-          {% user_react post request.user as user_react %}
-          <button  {% if user_react == 1 %} class="btn btn-outline-primary " {% else %}class="btn btn-outline-secondary"{% endif %} name="likebtn">
-            <i class="fas fa-thumbs-up" ></i> Like
-            <span class="counter">{{post.get_likes}}</span>
-          </button>
-          &nbsp
-          <button {% if user_react == 2 %} class="btn btn-outline-primary "{% else %}class="btn btn-outline-secondary"{% endif %} name="dislikebtn" >
-            
-            <i class="fas fa-thumbs-down" ></i> Dislike
-            <span class="counter">{{post.get_dislikes}}</span>
-          </div>
-        </form>
-          {% comment %} <div class="post-action-button btn-outline-secondary">
+        <form url-data={% url 'react' post.id %} method="post">
+        {% csrf_token %}
+            {% user_react post request.user as user_react %}
+            <button  type="button"{% if user_react == 1 %} class="btn btn-outline-primary btn-reaction " {% else %}class="btn btn-outline-secondary btn-reaction"{% endif %} name="likebtn">
+              <i class="fas fa-thumbs-up" ></i> Like
+              <span class="counter">{{post.get_likes}}</span>
+            </button>
+            &nbsp
+            <button type="button"{% if user_react == 2 %} class="btn btn-outline-primary btn-reaction "{% else %}class="btn btn-outline-secondary btn-reaction"{% endif %} name="dislikebtn" >
+              <i class="fas fa-thumbs-down" ></i> Dislike
+              <span class="counter">{{post.get_dislikes}}</span>
+            </button>
+            &nbsp
+          </form>
+          <button class="btn btn-outline-secondary" name="commentbtn">
             <i class="fas fa-comment"></i> Comment
             <span class="counter">3</span>
-          </div> {% endcomment %}
+        </button>
         </div>
 
     </div>
 
-
+  </div>
   
 
   

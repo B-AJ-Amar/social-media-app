@@ -1,4 +1,5 @@
-from django.shortcuts import render,HttpResponse,redirect,HttpResponseRedirect
+from django.shortcuts import render,redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
@@ -162,34 +163,49 @@ def post(request,post_id):
     return render(request,"posts/post.html",context)
 
 
+
+# ! AJAX ===============================================
+
 @login_required(login_url="/accounts/login/")
 def react(request,post_id:int):
-    if request.method == "POST" and "likebtn" in request.POST:
+    # 0 
+    # 1 delete like
+    # 2 to     like
+    # 3 make   like
+    # 4 delete dislike
+    # 5 to     dislike
+    # 6 make   dislike
+    type = request.POST.get("type")
+    print(f"type =========================== {request.POST}")
+    if not type: return JsonResponse({"msg":"bad request"},safe=False,status=400)  #bad request
+    if type == "likebtn":
         reaction = Reaction.objects.filter(user_id=request.user,post_id=Post.objects.get(id=post_id))
         if reaction.exists():
             reaction = reaction.first()
             if reaction.type == "like":
                 reaction.delete()
+                return JsonResponse({"msg":1},safe=False, status=200) 
+                
             else:
                 reaction.type = "like"
                 reaction.save()
+                return JsonResponse({"msg":2},safe=False, status=200) 
         else:
             Reaction.objects.create(type="like",user_id=request.user,post_id=Post.objects.get(id=post_id))
+            return JsonResponse({"msg":3},safe=False, status=200) 
     
-    elif request.method == "POST" and "dislikebtn" in request.POST:
+    elif  type == "dislikebtn":
         reaction = Reaction.objects.filter(user_id=request.user,post_id=Post.objects.get(id=post_id))
         if reaction.exists():
             reaction = reaction.first()
             if reaction.type == "dislike":
                 reaction.delete()
+                return JsonResponse({"msg":1},safe=False, status=200) 
             else:
                 reaction.type = "dislike"
                 reaction.save()
+                return JsonResponse({"msg":5},safe=False, status=200) 
         else:
             Reaction.objects.create(type="dislike",user_id=request.user,post_id=Post.objects.get(id=post_id))
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER') , f'{post_id}_section')
-    return redirect(f"/posts/post/{post_id}")
-    
-# def delete
-# edit
+            return JsonResponse({"msg":3},safe=False, status=200) 
 
