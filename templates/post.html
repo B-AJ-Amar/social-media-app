@@ -39,8 +39,13 @@
             </form>
             {% else %}
             <li><a class="dropdown-item" href="#">Hide</a></li>
-            <li><a class="dropdown-item" href="#">Block</a></li>
-            {% endif %}
+            <li>
+              <form method='POST' data-username="{{post.author.username}}" data-url="{% url 'blocked_list'  %}" >
+                {% csrf_token %}
+                <button type="button" name="block_btn" class="dropdown-item block-unblock-action">Block</button>
+              </form>
+            </li>
+              {% endif %}
           </ul>
         </div>
       </div>

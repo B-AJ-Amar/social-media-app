@@ -17,15 +17,15 @@
     
         {% if blocked_list %}
         
-        {% for user in blocked_list %}
         <div class="search-results-container-users">
+        {% for user in blocked_list %}
 
           {% include 'user.html' with reqUser=request.user user=user type=2 %}
 
+          
+          
+          {% endfor %}
         </div>
-        
-            
-        {% endfor %}
         
         {% endif %}
 

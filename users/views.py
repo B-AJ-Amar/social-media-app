@@ -302,7 +302,7 @@ def blocked_list(request):
         if btn == "unblock_btn":
             Block.objects.filter(blocker=request.user,blocked=user).delete()
             return JsonResponse({"msg":1})
-        elif "block_btn" in  request.POST  :
+        elif "block_btn" in  request.POST  or btn == "block_btn":
             try :
                 Follow.objects.get(follower=request.user,following=user).delete()
             except: pass
@@ -316,8 +316,12 @@ def blocked_list(request):
                 FollowrRquests.objects.filter(sender=user,reciver=request.user).delete()
             except: pass
             Block.objects.create(blocker=request.user,blocked=user)
-            print("blocked")
+            print(request.headers)
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                print("ajax blocked")
+                return JsonResponse({"msg":2})
+            print("blocked sync")
             return redirect("/accounts/blocked_list/")
             # print("donne")
-        return JsonResponse({"msg":0})
+        return JsonResponse({"msg":0},status=400)
     
