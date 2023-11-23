@@ -35,7 +35,7 @@ def create(request):
                 
                 messages.success(request,"post created successfully")
                 # HttpResponse("done")
-                return redirect(f"/profile/{request.user.username}")    
+                return redirect(f"/{request.user.username}")    
        
     return render(request,"posts/create.html",context)
 
@@ -82,7 +82,7 @@ def edit(request,post_id):
                 
             messages.success(request,"post edited successfully")
                 # HttpResponse("done")
-            return redirect(f"/profile/{request.user.username}")    
+            return redirect(f"/{request.user.username}")    
        
     return render(request,"posts/edit.html",{"post":p})
 
@@ -111,7 +111,7 @@ def delete(request,post_id):
                 
         messages.success(request,"post deleted successfully")
             # HttpResponse("done")
-        return redirect(f"/profile/{request.user.username}")    
+        return redirect(f"/{request.user.username}")    
     
     return render(request,"posts/delete.html",context = {"post":p })
 
